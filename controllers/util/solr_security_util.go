@@ -207,7 +207,7 @@ func enableSecureProbesOnSolrCloudStatefulSet(solrCloud *solr.SolrCloud, statefu
 
 func cmdToPutSecurityJsonInZk() string {
 	scriptsDir := "/opt/solr/server/scripts/cloud-scripts"
-	cmd := " ZK_SECURITY_JSON=$(%s/zkcli.sh -zkhost ${ZK_HOST} -cmd get /security.json); "
+	cmd := " ZK_SECURITY_JSON=$(%s/zkcli.sh -zkhost ${ZK_HOST} -cmd get /security.json || echo 'failed-to-get-security.json'); "
 	cmd += "if [ ${#ZK_SECURITY_JSON} -lt 3 ]; then echo $SECURITY_JSON > /tmp/security.json; %s/zkcli.sh -zkhost ${ZK_HOST} -cmd putfile /security.json /tmp/security.json; echo \"put security.json in ZK\"; fi"
 	return fmt.Sprintf(cmd, scriptsDir, scriptsDir)
 }
